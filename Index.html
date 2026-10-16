@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <?!= include('Stylesheet'); ?>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">MRC</span>
+        <div class="brand-text">
+          <div class="brand-title">MRC Mate</div>
+          <div class="brand-subtitle">Monitoring Resource Co-ordinator</div>
+        </div>
+      </div>
+      <nav id="nav" class="nav"><!-- populated by JavaScript.html --></nav>
+      <div class="sidebar-footer">Work in progress — tools are added as responsibilities are confirmed.</div>
+    </aside>
+
+    <main class="content">
+      <section id="tool-home" class="panel">
+        <h1>Overview</h1>
+        <p class="muted">This dashboard is a shell. Tools below marked <span class="badge badge-planned">Planned</span> will be built out as MRC responsibilities are defined; <span class="badge badge-active">Active</span> tools are ready to use.</p>
+        <div id="home-cards" class="card-grid"><!-- populated by JavaScript.html --></div>
+      </section>
+
+      <section id="tool-announcements" class="panel" hidden>
+        <h1>Team Notes</h1>
+        <p class="muted">Shared notes/announcements for the MRC team. Anyone with access to this dashboard can post here.</p>
+        <form id="note-form" class="note-form">
+          <textarea id="note-input" placeholder="Write a note for the team…" rows="3" required></textarea>
+          <button type="submit">Post Note</button>
+        </form>
+        <ul id="note-list" class="note-list"></ul>
+      </section>
+
+      <section id="tool-buffer" class="panel placeholder" hidden></section>
+      <section id="tool-roster" class="panel placeholder" hidden></section>
+      <section id="tool-coverage" class="panel placeholder" hidden></section>
+      <section id="tool-escalations" class="panel placeholder" hidden></section>
+    </main>
+  </div>
+
+  <?!= include('JavaScript'); ?>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<script>
+  var TOOLS = [];
+  var ACTIVE_TOOL = 'home';
+
+  document.addEventListener('DOMContentLoaded', function () {
+    google.script.run.withSuccessHandler(onRegistryLoaded).getToolRegistry();
+    bindNoteForm();
+  });
+
+  function onRegistryLoaded(registry) {
+    TOOLS = registry || [];
+    renderNav();
+    renderHomeCards();
+    showTool(ACTIVE_TOOL);
+    loadAnnouncements();
+  }
+
+  function renderNav() {
+    var nav = document.getElementById('nav');
+    nav.innerHTML = '';
+    TOOLS.forEach(function (tool) {
+      var btn = document.createElement('button');
+      btn.className = 'nav-item';
+      btn.dataset.tool = tool.id;
+      btn.innerHTML =
+        '<span class="nav-icon">' + tool.icon + '</span>' +
+        '<span>' + escapeHtml(tool.name) + '</span>' +
+        '<span class="nav-dot"></span>';
+      if (tool.status === 'active') btn.classList.add('is-active-tool');
+      btn.addEventListener('click', function () { showTool(tool.id); });
+      nav.appendChild(btn);
+    });
+  }
+
+  function showTool(toolId) {
+    ACTIVE_TOOL = toolId;
+
+    document.querySelectorAll('.nav-item').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.tool === toolId);
+    });
+
+    document.querySelectorAll('.panel').forEach(function (panel) {
+      panel.hidden = panel.id !== 'tool-' + toolId;
+    });
+
+    var tool = TOOLS.find(function (t) { return t.id === toolId; });
+    var panel = document.getElementById('tool-' + toolId);
+    if (tool && tool.status === 'planned' && panel && !panel.dataset.rendered) {
+      panel.innerHTML =
+        '<h1>' + tool.icon + ' ' + escapeHtml(tool.name) + '</h1>' +
+        '<span class="badge badge-planned">Planned</span>' +
+        '<p class="muted" style="margin-top:10px;">' + escapeHtml(tool.description) + '</p>' +
+        '<div class="placeholder-box">This tool hasn\'t been built yet. It will show up here once the MRC\'s requirements for it are confirmed.</div>';
+      panel.dataset.rendered = '1';
+    }
+  }
+
+  function renderHomeCards() {
+    var grid = document.getElementById('home-cards');
+    grid.innerHTML = '';
+    TOOLS.filter(function (t) { return t.id !== 'home'; }).forEach(function (tool) {
+      var badgeClass = tool.status === 'active' ? 'badge-active' : 'badge-planned';
+      var badgeText = tool.status === 'active' ? 'Active' : 'Planned';
+      var card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML =
+        '<div class="card-title">' + tool.icon + ' ' + escapeHtml(tool.name) + '</div>' +
+        '<div class="card-desc">' + escapeHtml(tool.description) + '</div>' +
+        '<span class="badge ' + badgeClass + '">' + badgeText + '</span>';
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', function () { showTool(tool.id); });
+      grid.appendChild(card);
+    });
+  }
+
+  // --- Team Notes (example working tool) ---
+
+  function bindNoteForm() {
+    var form = document.getElementById('note-form');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var input = document.getElementById('note-input');
+      var text = input.value.trim();
+      if (!text) return;
+      var button = form.querySelector('button');
+      button.disabled = true;
+      google.script.run
+        .withSuccessHandler(function (notes) {
+          input.value = '';
+          button.disabled = false;
+          renderNotes(notes);
+        })
+        .withFailureHandler(function (err) {
+          button.disabled = false;
+          alert('Could not post note: ' + err.message);
+        })
+        .addAnnouncement(text);
+    });
+  }
+
+  function loadAnnouncements() {
+    google.script.run.withSuccessHandler(renderNotes).getAnnouncements();
+  }
+
+  function renderNotes(notes) {
+    var list = document.getElementById('note-list');
+    list.innerHTML = '';
+    if (!notes || !notes.length) {
+      list.innerHTML = '<li class="empty-state">No notes yet — be the first to post one.</li>';
+      return;
+    }
+    notes.forEach(function (note) {
+      var li = document.createElement('li');
+      li.className = 'note-item';
+      var when = new Date(note.timestamp).toLocaleString();
+      li.innerHTML =
+        '<div>' + escapeHtml(note.text) + '</div>' +
+        '<div class="note-meta">' + escapeHtml(note.author) + ' • ' + when + '</div>';
+      list.appendChild(li);
+    });
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+  }
+</script>

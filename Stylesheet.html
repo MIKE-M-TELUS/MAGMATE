@@ -1,0 +1,205 @@
+<style>
+  :root {
+    --purple: #4b286d;
+    --purple-dark: #33144f;
+    --green: #66cc00;
+    --bg: #f5f4f7;
+    --card-bg: #ffffff;
+    --border: #e2dfe8;
+    --text: #231e2b;
+    --muted: #6b6578;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .app {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: var(--purple);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .brand-mark {
+    background: var(--green);
+    color: var(--purple-dark);
+    font-weight: 700;
+    font-size: 12px;
+    padding: 6px 8px;
+    border-radius: 6px;
+  }
+
+  .brand-title { font-weight: 700; font-size: 16px; }
+  .brand-subtitle { font-size: 11px; opacity: 0.8; }
+
+  .nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 8px;
+    gap: 2px;
+    overflow-y: auto;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    text-align: left;
+    width: 100%;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.1); }
+  .nav-item.active { background: rgba(255,255,255,0.18); font-weight: 600; }
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+  .nav-dot {
+    margin-left: auto;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #bda6cf;
+  }
+  .nav-item.is-active-tool .nav-dot { background: var(--green); }
+
+  .sidebar-footer {
+    padding: 12px 16px 0;
+    font-size: 11px;
+    opacity: 0.65;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .content {
+    flex: 1;
+    padding: 32px 40px;
+    overflow-y: auto;
+  }
+
+  .panel h1 {
+    margin: 0 0 6px;
+    font-size: 22px;
+  }
+
+  .muted { color: var(--muted); font-size: 14px; }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .card-desc { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+
+  .badge-active { background: #e6f7d4; color: #3c7a00; }
+  .badge-planned { background: #ece8f2; color: var(--purple); }
+
+  .placeholder-box {
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--muted);
+    margin-top: 16px;
+  }
+
+  .note-form {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    align-items: flex-start;
+  }
+
+  .note-form textarea {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+  }
+
+  .note-form button {
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .note-form button:disabled { opacity: 0.6; cursor: default; }
+  .note-form button:hover:not(:disabled) { background: var(--purple-dark); }
+
+  .note-list { list-style: none; padding: 0; margin: 0; }
+
+  .note-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+
+  .note-meta {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .empty-state { color: var(--muted); font-size: 14px; padding: 10px 0; }
+</style>
